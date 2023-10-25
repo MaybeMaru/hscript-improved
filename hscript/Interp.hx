@@ -1031,9 +1031,9 @@ class Interp {
 		if(o == CustomClassHandler.staticHandler && scriptObject != null) {
 			return Reflect.callMethod(scriptObject, Reflect.field(scriptObject, "_HX_SUPER__" + f), args);
 		}
-		if (o is String) {
+		if (o is String && stringTools.exists(f)) {
 			args.insert(0, o);
-			return stringTools.exists(f) ? call(null, stringTools.get(f), args) : null;
+			return call(null, stringTools.get(f), args);
 		}
 		return call(o, get(o, f), args);
 	}
