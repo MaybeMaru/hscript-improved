@@ -41,7 +41,7 @@ class Script {
 	static final EMPTY_ARGUMENTS:Array<Dynamic> = [];
 
 	inline public function call(method:String, ?args:Array<Dynamic>):Dynamic {
-		final method = get(method);
+		final method:Dynamic = get(method);
 
 		if (method == null) return null;
 		else
@@ -49,7 +49,7 @@ class Script {
 			if (args == null)
 				args = EMPTY_ARGUMENTS;
 
-			return Reflect.callMethod(this, get(method), args);
+			return Reflect.callMethod(this, method, args);
 		}
 	}
 }
