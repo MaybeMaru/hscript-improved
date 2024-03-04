@@ -2,19 +2,29 @@ package hscript;
 import hscript.Parser;
 import hscript.Interp;
 
-class Script {
+class Script
+{
 	public static var parser:Parser = new Parser();
 	public var interp:Interp;
 
 	public var variables(get, never):Map<String, Dynamic>;
-	inline function get_variables()
+	inline function get_variables():Map<String, Dynamic>
 		return interp.variables;
 
-	public function new() {
+	public function new():Void
+	{
 		interp  = new Interp();
 	}
 
-	public function executeString(code:String = "") {
+	public function dispose():Void
+	{
+		interp.variables.clear();
+		interp.variables = null;
+		interp = null;
+	}
+
+	public function executeString(code:String = ""):Dynamic
+	{
 		if (code.length <= 0)
 			return null;
 		
@@ -26,21 +36,25 @@ class Script {
 		return interp.execute(parser.parseString(code));
 	}
 
-	inline public function set(varName:String, varValue:Dynamic):Void {
+	inline public function set(varName:String, varValue:Dynamic):Void
+	{
 		interp.setVar(varName, varValue);
 	}
 
-	inline public function get(field:String):Dynamic {
+	inline public function get(field:String):Dynamic
+	{
 		return variables.get(field);
 	}
 
-	inline public function exists(field:String):Bool {
+	inline public function exists(field:String):Bool
+	{
 		return variables.exists(field);
 	}
 
 	static final EMPTY_ARGUMENTS:Array<Dynamic> = [];
 
-	inline public function call(method:String, ?args:Array<Dynamic>):Dynamic {
+	inline public function call(method:String, ?args:Array<Dynamic>):Dynamic
+	{
 		final method:Dynamic = get(method);
 
 		if (method == null) return null;
