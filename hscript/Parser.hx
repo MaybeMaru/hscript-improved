@@ -308,7 +308,7 @@ class Parser {
 			tk = token();
 		}
 
-		if( tk != TSemicolon && tk != TEof ) {
+		if( tk != TSemicolon) if (tk != TEof) {
 			if( isBlock(e) )
 				push(tk);
 			else
@@ -480,7 +480,7 @@ class Parser {
 				if( tk == TComma )
 					tk = token();
 			}
-			if( a.length == 1 && a[0] != null ) // What is this for???
+			if( a.length == 1) if (a[0] != null) // What is this for???
 				switch( expr(a[0]) ) {
 					case EFor(_), EWhile(_), EDoWhile(_):
 						var tmp = "__a_" + (uid++);
@@ -567,8 +567,9 @@ class Parser {
 	}
 
 	function makeUnop( op, e ) {
-		if( e == null && resumeErrors )
+		if ( e == null) if (resumeErrors)
 			return null;
+		
 		return switch( expr(e) ) {
 		case EBinop(bop, e1, e2): mk(EBinop(bop, makeUnop(op, e1), e2), pmin(e1), pmax(e2));
 		case ETernary(e1, e2, e3): mk(ETernary(makeUnop(op, e1), e2, e3), pmin(e1), pmax(e3));
@@ -577,8 +578,9 @@ class Parser {
 	}
 
 	function makeBinop( op, e1, e ) {
-		if( e == null && resumeErrors )
+		if( e == null) if (resumeErrors)
 			return mk(EBinop(op,e1,e),pmin(e1),pmax(e1));
+		
 		return switch( expr(e) ) {
 		case EBinop(op2,e2,e3):
 			if( opPriority.get(op) <= opPriority.get(op2) && !opRightAssoc.exists(op) )
@@ -715,12 +717,13 @@ class Parser {
 			var tk = token();
 			var t = null;
 			nextType = null;
-			if( tk == TDoubleDot && allowTypes ) {
+			if( tk == TDoubleDot) if (allowTypes) {
 				t = parseType();
 				tk = token();
 
 				nextType = t;
 			}
+
 			var e = null;
 			if( Type.enumEq(tk,TOp("=")) )
 				e = parseExpr();
@@ -1055,7 +1058,7 @@ class Parser {
 					unexpected(tk);
 				}
 
-				if(disableOrOp && op == "|") {
+				if(disableOrOp) if (op == "|") {
 					push(tk);
 					return e1;
 				}
@@ -1682,7 +1685,7 @@ class Parser {
 					case ".".code:
 						if( exp > 0 ) {
 							// in case of '0...'
-							if( exp == 10 && readChar() == ".".code ) {
+							if( exp == 10) if (readChar() == ".".code) {
 								push(TOp("..."));
 								var i = Std.int(n);
 								return TConst( (i == n) ? CInt(i) : CFloat(n) );
@@ -1874,7 +1877,7 @@ class Parser {
 						}
 						var pop = op;
 						op += String.fromCharCode(char);
-						if( !opPriority.exists(op) && opPriority.exists(pop) ) {
+						if( !opPriority.exists(op)) if (opPriority.exists(pop)) {
 							if( op == "//" || op == "/*" )
 								return tokenComment(op,char);
 							this.char = char;

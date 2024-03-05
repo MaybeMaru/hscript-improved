@@ -246,7 +246,7 @@ class Interp {
 				// TODO
 			case EField(e, f, s):
 				var obj = expr(e);
-				if(s && obj == null) return null;
+				if(s) if (obj == null) return null;
 				v = set(obj, f, v);
 			case EArray(e, index):
 				var arr:Dynamic = expr(e);
@@ -287,7 +287,7 @@ class Interp {
 					l.r = v;
 			case EField(e, f, s):
 				var obj = expr(e);
-				if(s && obj == null) return null;
+				if(s) if (obj == null) return null;
 				v = fop(get(obj, f), expr(e2));
 				v = set(obj, f, v);
 			case EArray(e, index):
@@ -328,7 +328,7 @@ class Interp {
 				return v;
 			case EField(e, f, s):
 				var obj = expr(e);
-				if(s && obj == null) return null;
+				if(s) if (obj == null) return null;
 				var v:Dynamic = get(obj, f);
 				if (prefix) {
 					v += delta;
@@ -505,7 +505,7 @@ class Interp {
 				//trace(realClassName, cl, en, splitClassName);
 
 				// Allow for flixel.ui.FlxBar.FlxBarFillDirection;
-				if (cl == null && en == null) {
+				if (cl == null) if (en == null) {
 					if(splitClassName.length > 1) {
 						splitClassName.splice(-2, 1); // Remove the last last item
 						realClassName = splitClassName.join(".");
@@ -584,7 +584,7 @@ class Interp {
 				return v;
 			case EField(e, f, s):
 				var field = expr(e);
-				if(s && field == null)
+				if(s) if (field == null)
 					return null;
 				return get(field, f);
 			case EBinop(op, e1, e2):
@@ -649,7 +649,7 @@ class Interp {
 				var __capturedLocals = duplicate(locals);
 				var capturedLocals:Map<String, {r:Dynamic, depth:Int}> = [];
 				for(k=>e in __capturedLocals)
-					if (e != null && e.depth > 0)
+					if (e != null) if (e.depth > 0)
 						capturedLocals.set(k, e);
 
 				var me = this;
@@ -764,9 +764,8 @@ class Interp {
 								isAllObject = false;
 								isAllEnum = false;
 							} else {
-								if(!isAllObject && !isAllEnum) {
+								if(!isAllObject) if (!isAllEnum)
 									throw("Unknown Type Key");
-								}
 							}
 						}
 					}
@@ -1060,7 +1059,7 @@ class Interp {
 		if(o == CustomClassHandler.staticHandler && scriptObject != null) {
 			return Reflect.callMethod(scriptObject, Reflect.field(scriptObject, "_HX_SUPER__" + f), args);
 		}
-		if (o is String && stringTools.exists(f)) {
+		if (o is String) if (stringTools.exists(f)) {
 			args.insert(0, o);
 			return call(null, stringTools.get(f), args);
 		}
