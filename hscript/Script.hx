@@ -51,19 +51,29 @@ class Script
 		return variables.exists(field);
 	}
 
-	static final EMPTY_ARGUMENTS:Array<Dynamic> = [];
-
 	inline public function call(method:String, ?args:Array<Dynamic>):Dynamic
 	{
 		final method:Dynamic = get(method);
 
-		if (method == null) return null;
-		else
+		if (method != null)
 		{
-			if (args == null)
-				args = EMPTY_ARGUMENTS;
+            if (args == null)
+            {
+                return method();
+            }
 
-			return Reflect.callMethod(this, method, args);
+			return switch (args.length)
+            {                
+                case 0: method();
+                case 1: method(args[0]);
+                case 2: method(args[0], args[1]);
+                case 3: method(args[0], args[1], args[2]);
+                case 4: method(args[0], args[1], args[2], args[3]);
+                case 5: method(args[0], args[1], args[2], args[3], args[4]);
+                default: Reflect.callMethod(null, method, args);
+            }
 		}
+        
+        return null;
 	}
 }
