@@ -51,7 +51,7 @@ class Script
 		return variables.exists(field);
 	}
 
-	public function call(method:String, ?args:Array<Dynamic>):Dynamic
+	inline public function call(method:String, ?args:Array<Dynamic>):Dynamic
 	{
 		final method:Dynamic = get(method);
 
