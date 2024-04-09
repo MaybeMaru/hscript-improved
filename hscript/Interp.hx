@@ -1031,36 +1031,36 @@ class Interp {
 		return v;
 	}
 
-	public static var stringTools(default, never):Map<String, haxe.Constraints.Function> = [
-		'contains' => function(s, value) return StringTools.contains(s, value),
-		'startsWith' => function(s, start) return StringTools.startsWith(s, start),
-		'endsWith' => function(s, end) return StringTools.endsWith(s, end),
-		'replace' => function(s, sub, by) return StringTools.replace(s, sub, by),
-		'replaceRe' => function(s, re, by) return StringTools.replace(s, re, by),
-		'trim' => function(s) return StringTools.trim(s),
-		'ltrim' => function(s) return StringTools.ltrim(s),
-		'rtrim' => function(s) return StringTools.rtrim(s),
-		'fastCodeAt' => function(s, index) return StringTools.fastCodeAt(s, index),
-		'hex' => function(n, ?digits) return StringTools.hex(n, digits),
-		'htmlEscape' => function(s, ?quotes) return StringTools.htmlEscape(s, quotes),
-		'htmlUnescape' => function(s) return StringTools.htmlUnescape(s),
-		'isEof' => function(c) return StringTools.isEof(c),
-		'isSpace' => function(s, pos) return StringTools.isSpace(s, pos),
-		'iterator' => function(s) return StringTools.iterator(s),
-		'keyValueIterator' => function(s) return StringTools.keyValueIterator(s),
-		'lpad' => function(s, c, l) return StringTools.lpad(s, c, l),
-		'rpad' => function(s, c, l) return StringTools.rpad(s, c, l),
-		'unsafeCodeAt' => function(s, index) return StringTools.unsafeCodeAt(s, index),
-		'urlDecode' => function(s) return StringTools.urlDecode(s),
-		'urlEncode' => function(s) return StringTools.urlEncode(s)
+	public static final stringTools:Map<String, haxe.Constraints.Function> = [
+		'contains' => (s, value) -> return StringTools.contains(s, value),
+		'startsWith' => (s, start) -> return StringTools.startsWith(s, start),
+		'endsWith' => (s, end) -> return StringTools.endsWith(s, end),
+		'replace' => (s, sub, by) -> return StringTools.replace(s, sub, by),
+		'replaceRe' => (s, re, by) -> return StringTools.replace(s, re, by),
+		'trim' => (s) -> return StringTools.trim(s),
+		'ltrim' => (s) -> return StringTools.ltrim(s),
+		'rtrim' => (s) -> return StringTools.rtrim(s),
+		'fastCodeAt' => (s, index) -> return StringTools.fastCodeAt(s, index),
+		'hex' => (n, ?digits) -> return StringTools.hex(n, digits),
+		'htmlEscape' => (s, ?quotes) -> return StringTools.htmlEscape(s, quotes),
+		'htmlUnescape' => (s) -> return StringTools.htmlUnescape(s),
+		'isEof' => (c) -> return StringTools.isEof(c),
+		'isSpace' => (s, pos) -> return StringTools.isSpace(s, pos),
+		'iterator' => (s) -> return StringTools.iterator(s),
+		'keyValueIterator' => (s) -> return StringTools.keyValueIterator(s),
+		'lpad' => (s, c, l) -> return StringTools.lpad(s, c, l),
+		'rpad' => (s, c, l) -> return StringTools.rpad(s, c, l),
+		'unsafeCodeAt' => (s, index) -> return StringTools.unsafeCodeAt(s, index),
+		'urlDecode' => (s) -> return StringTools.urlDecode(s),
+		'urlEncode' => (s) -> return StringTools.urlEncode(s)
 	];
 
 	function fcall(o:Dynamic, f:String, args:Array<Dynamic>):Dynamic {
-		if(o == CustomClassHandler.staticHandler && scriptObject != null) {
+		if(o == CustomClassHandler.staticHandler) if (scriptObject != null) {
 			return Reflect.callMethod(scriptObject, Reflect.field(scriptObject, "_HX_SUPER__" + f), args);
 		}
 		if (o is String) if (stringTools.exists(f)) {
-			args.insert(0, o);
+			args.unshift(o);
 			return call(null, stringTools.get(f), args);
 		}
 		return call(o, get(o, f), args);
